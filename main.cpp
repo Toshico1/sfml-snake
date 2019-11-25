@@ -2,12 +2,67 @@
 #include <iostream>
 using namespace sf;
 
+class Snake
+{
+private:
+    /* data */
+public:
+    int p_y = 100;
+    int p_x = 100;
+    RenderWindow *window;
+    Snake(RenderWindow *window);
+    ~Snake();
+    void render();
+};
+
+Snake::Snake(RenderWindow *window)
+{
+    this->window = window;
+    RectangleShape snake_block(Vector2f(4, 4));
+}
+
+Snake::~Snake()
+{
+}
+
+
+class Food
+{
+private:
+    /* data */
+public:
+    int p_x = 0;
+    int p_y = 0;
+    RectangleShape *eat;
+    Food();
+    RectangleShape &getFood();
+    ~Food();
+};
+
+Food::Food()
+{
+    p_x = rand() % 600+1;
+    p_y = rand() % 600+1;
+    eat = new RectangleShape(Vector2f(4, 4));
+    eat->setFillColor(Color::Green);
+    eat->setPosition(p_x, p_y);
+    //window.draw(eat);
+}
+RectangleShape &Food::getFood(){
+    return *eat; //WTF &?
+}
+
+Food::~Food()
+{
+
+}
+
  
 int main()
 {
 
 	// Объект, который, собственно, является главным окном приложения
-	RenderWindow window(VideoMode(600, 600), "SFML Works!");
+	RenderWindow window(VideoMode(600, 600), "Snake");
 	
 	// Главный цикл приложения. Выполняется, пока открыто окно
 	while (window.isOpen())
@@ -45,6 +100,8 @@ int main()
         for(int i=0; i<100; i++){
             window.draw(lines[i][1]);
         }
+        Food f1 = Food();
+        window.draw(f1.getFood());
         //и в конце выводим все на экран:
         window.display();
 	}
