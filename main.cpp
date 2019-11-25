@@ -34,27 +34,29 @@ public:
     int p_x = 0;
     int p_y = 0;
     RectangleShape *eat;
-    Food();
+    RenderWindow *win;
+
+    Food(RenderWindow *win);
     RectangleShape &getFood();
     ~Food();
 };
 
-Food::Food()
+Food::Food(RenderWindow *win)
 {
     p_x = rand() % 600+1;
     p_y = rand() % 600+1;
     eat = new RectangleShape(Vector2f(4, 4));
     eat->setFillColor(Color::Green);
     eat->setPosition(p_x, p_y);
-    //window.draw(eat);
+    win->draw(*eat);
 }
 RectangleShape &Food::getFood(){
-    return *eat; //WTF &?
+    //return *eat; //WTF &?
 }
 
 Food::~Food()
 {
-
+    
 }
 
  
@@ -75,6 +77,16 @@ int main()
 			if (event.type == Event::Closed)
 				// Тогда закрываем его
 				window.close();
+            if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Up)
+                    std::cout << "Up" << std::endl;
+                if (event.key.code == sf::Keyboard::Down)
+                    std::cout << "Down" << std::endl;
+                if (event.key.code == sf::Keyboard::Left)
+                    std::cout << "Left" << std::endl;
+                if (event.key.code == sf::Keyboard::Right)
+                    std::cout << "Right" << std::endl;
+            }
 		}
 	// Отрисовка окна
         RectangleShape lines[100][2];	//[][0] - vert [][1] - hor
@@ -100,8 +112,8 @@ int main()
         for(int i=0; i<100; i++){
             window.draw(lines[i][1]);
         }
-        Food f1 = Food();
-        window.draw(f1.getFood());
+        Food f1 = Food(&window); //создаем экземпляр еды
+
         //и в конце выводим все на экран:
         window.display();
 	}
